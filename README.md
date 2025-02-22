@@ -1,5 +1,6 @@
 # Simple PHP Database Class
 
+
 A lightweight, easy-to-use PHP database class that provides a simple and efficient way to interact with MySQL  database using **PDO (PHP Data Objects)**. This class is designed to streamline database operations, reduce boilerplate code, and improve code readability.
 
 ---
