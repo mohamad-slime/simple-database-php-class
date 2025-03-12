@@ -56,7 +56,7 @@ class Database
     public function query($sql, $params = []): bool|PDOStatement
     {
         try {
-            $stmt = $this->connect()->prepare($sql);
+            $stmt = $this->connect()->prepare(self::_uncomment($sql));
             $stmt->execute($params);
             return $stmt;
         } catch (PDOException $e) {
@@ -147,6 +147,31 @@ class Database
     {
         $stmt = $this->query($sql, $params);
         return $stmt->fetchAll();
+    }
+    /**
+     * Summary of _uncomment
+     * Remove all (inline & multiline bloc) comments from SQL query
+     * @param mixed $sql
+     * @return string
+     */
+    static protected function _uncomment($sql)
+    {
+        /* '@
+		(([\'"`]).*?[^\\\]\2) # $1 : Skip single & double quoted expressions
+		|(                    # $3 : Match comments
+		  (?:\#|--).*?$       # - Single line comments
+		  |                   # - Multi line (nested) comments
+		  /\*                 #   . comment open marker
+		    (?: [^/*]         #   . non comment-marker characters
+		      |/(?!\*)        #   . ! not a comment open
+		      |\*(?!/)        #   . ! not a comment close
+		      |(?R)           #   . recursive case
+		    )*                #   . repeat eventually
+		  \*\/                #   . comment close marker
+		)\s*                  # Trim after comments
+		|(?<=;)\s+            # Trim after semi-colon
+		@msx' */
+        return trim(preg_replace('@(([\'"`]).*?[^\\\]\2)|((?:\#|--).*?$|/\*(?:[^/*]|/(?!\*)|\*(?!/)|(?R))*\*\/)\s*|(?<=;)\s+@ms', '$1', $sql));
     }
 
     /**
