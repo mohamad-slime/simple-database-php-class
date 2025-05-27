@@ -1,56 +1,75 @@
-# Simple PHP Database Class
+# Simple Database PHP Class
 
-
-A lightweight, easy-to-use PHP database class that provides a simple and efficient way to interact with MySQL  database using **PDO (PHP Data Objects)**. This class is designed to streamline database operations, reduce boilerplate code, and improve code readability.
-
----
+A lightweight and simple PHP class for managing database connections and queries using PDO.
 
 ## Features
+- Easy-to-use PDO-based database connection.
+- Support for basic CRUD operations (Create, Read, Update, Delete).
+- Secure and configurable for different database types.
 
-- **Simple and Lightweight**: Easy to integrate into any PHP project.
-- **PDO-Based**: Uses PDO for secure and flexible database interactions.
-- **CRUD Operations**: Supports `insert`, `select`, `update`, and `delete` operations.
-- **Prepared Statements**: Protects against SQL injection.
-- **Error Handling**: Throws exceptions for database errors.
-- **Flexible**: Works with MySQL, PostgreSQL, SQLite, and other PDO-supported databases.
-
----
+## Prerequisites
+- PHP 7.4 or higher
+- PDO extension enabled
+- A supported database (e.g., MySQL, PostgreSQL)
 
 ## Installation
+1. Clone the repository:
+   ```bash
+   git clone https://github.com/mohamad-slime/simple-database-php-class.git
+   ```
+2. Navigate to the project directory:
+   ```bash
+   cd simple-database-php-class
+   ```
+3. Install dependencies using Composer:
+   ```bash
+   composer install
+   ```
+4. Configure your database connection in a `.env` file (see [Environment Variables](#environment-variables)).
 
-1. **Download the Class**:
-   - Download the `Database.php` file from the repository.
+## Usage
+```php
+require 'vendor/autoload.php';
 
-2. **Include the Class in Your Project**:
-   ```php
-   require 'path/to/Database.php';
+use SimpleDatabase\Database;
+
+try {
+    $db = new Database('mysql', 'localhost', 'mydb', 'username', 'password');
+    $results = $db->select('users', ['id', 'name'], ['age' => 25]);
+    print_r($results);
+} catch (Exception $e) {
+    echo 'Error: ' . $e->getMessage();
+}
+```
+## Running the Example
+1. Create a `.env` file in the project root with your database credentials (see `.env.example`).
+2. Run the example:
+   ```bash
+   php examples/example.php
+   ```
    
-3. **Configure the Database Connection:**
-   - Create an instance of the Database class with your database credentials.
-   
-## Usage 
-1. Create a Database Instance
-   ```php
-   $db = new Database('localhost', 'dbname', 'username', 'password');
+## Environment Variables
+Create a `.env` file in the project root and add your database credentials:
+```
+DB_HOST=localhost
+DB_NAME=mydb
+DB_USER=username
+DB_PASS=password
+DB_TYPE=mysql
+```
 
-2. **Insert Data**:
-   ```php
-   $lastInsertId = $db->insert('users', [
-    'name' => 'John Doe',
-    'email' => 'john@example.com']);
-   echo "Last Insert ID: $lastInsertId";
-3. **Fetch Data**:
-   ```php
-   $users = $db->select('users', '*', 'id > :id', [':id' => 5]);
-    foreach ($users as $user) {
-    echo "Name: {$user['name']}, Email: {$user['email']}\n";}
-4. **Update Data**:
-   ```php
-   $affectedRows = $db->update('users', [
-   'name' => 'Jane Doe'], 'id = :id', [':id' => 1]);
-   echo "Affected Rows: $affectedRows";
-5. **Delete Data**:
-   ```php
-   $affectedRows = $db->delete('users', 'id = :id', [':id' => 10]);
-   echo "Affected Rows: $affectedRows";
-     
+## Running Tests
+Run unit tests using PHPUnit:
+```bash
+vendor/bin/phpunit tests
+```
+
+## Contributing
+1. Fork the repository.
+2. Create a new branch (`git checkout -b feature-branch`).
+3. Make your changes and commit (`git commit -m 'Add new feature'`).
+4. Push to the branch (`git push origin feature-branch`).
+5. Create a Pull Request.
+
+## License
+This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.

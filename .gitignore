@@ -1,0 +1,21 @@
+ # PHP and Composer
+/vendor/
+composer.lock
+*.log
+.env
+
+# IDE and Editor files
+.idea/
+.vscode/
+*.sublime-project
+*.sublime-workspace
+
+# Temporary files
+*.tmp
+*.bak
+*.swp
+*~
+
+# OS generated files
+.DS_Store
+Thumbs.db
