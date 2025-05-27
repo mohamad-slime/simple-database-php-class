@@ -126,6 +126,16 @@ class Database
     }
 
     /**
+     * Selects records from a table based on conditions.
+     *
+     * @param string $table      Table name
+     * @param array  $columns    Array of column names to select (default: ['*'])
+     * @param array  $conditions Associative array of where conditions (column => value)
+     * @return array The selected records
+     * @throws DatabaseException If the select fails
+     */
+
+    /**
      * Updates records in a table based on conditions.
      *
      * @param string $table       Table name
