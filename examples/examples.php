@@ -2,25 +2,33 @@
 
 declare(strict_types=1);
 
-require 'vendor/autoload.php';
+require '../vendor/autoload.php';
 
 use SimpleDatabase\Database;
 use SimpleDatabase\DatabaseException;
 use Dotenv\Dotenv;
 
 // Load environment variables from .env file
-Dotenv::createImmutable(__DIR__ . '/..')->load();
+// Dotenv::createImmutable(__DIR__ . '/..')->load();
 
 // Initialize the Database class with environment variables
+
 try {
     $db = new Database(
-        $_ENV['DB_TYPE'] ?? 'mysql',
-        $_ENV['DB_HOST'] ?? 'localhost',
-        $_ENV['DB_NAME'] ?? 'testdb',
-        $_ENV['DB_USER'] ?? 'root',
+        $_ENV['DB_TYPE'] ?? 'sqlite',
+        $_ENV['DB_HOST'] ?? ':',
+        $_ENV['DB_NAME'] ?? ':memory:',
+        $_ENV['DB_USER'] ?? '',
         $_ENV['DB_PASS'] ?? '',
         $_ENV['DB_CHARSET'] ?? 'utf8mb4'
     );
+    $db->query('
+    CREATE TABLE users (
+        id INTEGER PRIMARY KEY AUTOINCREMENT,
+        name TEXT NOT NULL,
+        age INTEGER NOT NULL
+    )
+');
 
     // Example 1: Insert a new user
     echo "Example 1: Inserting a new user\n";
@@ -30,6 +38,7 @@ try {
     ];
     $userId = $db->insert('users', $userData);
     echo "Inserted user with ID: $userId\n";
+ 
 
     // Example 2: Fetch a single user
     echo "\nExample 2: Fetching a single user\n";
