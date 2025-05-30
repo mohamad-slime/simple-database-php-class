@@ -135,6 +135,21 @@ class Database
      * @throws DatabaseException If the select fails
      */
 
+    public function select(string $table, array $columns = ['*'], array $conditions = []): array
+    {
+        $columnClause = implode(', ', $columns);
+
+        $where = array_map(fn($key) => "{$key} = :{$key}", array_keys($conditions));
+        $whereClause = implode(' AND ', $where);
+
+        $sql = "SELECT {$columnClause} FROM {$table}";
+        if (!empty($conditions)) {
+            $sql .= " WHERE {$whereClause}";
+        }
+
+        return $this->query($sql, $conditions)->fetchAll();
+    }
+
     /**
      * Updates records in a table based on conditions.
      *
